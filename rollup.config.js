@@ -6,8 +6,8 @@ let plugins = []
 if (!isDev) plugins = plugins.concat([])
 
 module.exports = {
-  dest: 'bundle.js',
-  entry: 'src/JSONStream.js',
+  dest: 'index.js',
+  entry: '', // TODO
   format: 'cjs',
   plugins: plugins
 }
