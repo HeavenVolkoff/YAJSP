@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+if ! hash npm &> /dev/null; then
+  echo "Couldn't find NPM. Do you have NodeJS instaled?"
+  exit 1
+fi
+
+if ! hash prettier &> /dev/null; then
+  echo "Couldn't find Prettier. Install with: 'npm install -g prettier'"
+  exit 1
+fi
+
+if ! hash standard &> /dev/null; then
+  echo "Couldn't find Standard. Install with: 'npm install -g standard'"
+  exit 1
+fi
+
+find -E "$1" -type f -iregex ".*\.(js|jsx)" -print | while read -r FILE ; do
+    echo "File: $FILE"
+    CODE=`prettier --print-width 80 --tab-width 2 --no-use-tabs --no-semi --single-quote --trailing-comma=none --color "$FILE"`
+    if [ $? -ne 0 ]; then continue; fi
+
+    CODE=`echo "$CODE" | standard --stdin --fix`
+    if [ $? -ne 0 ]; then continue; fi
+
+    echo "Writing File..."
+    echo "$CODE" > "$FILE"
+done

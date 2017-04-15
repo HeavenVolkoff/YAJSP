@@ -1,0 +1,35 @@
+{
+  "name": "yajsp",
+  "version": "0.0.0",
+  "description": "Yet Another Json Stream Parser",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "standard && node ./test/run.js",
+    "prettify": "scripts/prettify ./src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HeavenVolkoff/JSONStream.git"
+  },
+  "keywords": [
+    "json",
+    "parser",
+    "stream",
+    "json-stream",
+    "json-parser"
+  ],
+  "author": "Vítor Vasconcellos",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/HeavenVolkoff/JSONStream/issues"
+  },
+  "homepage": "https://github.com/HeavenVolkoff/JSONStream#readme",
+  "devDependencies": {
+    "tape": "^4.6.3",
+    "rollup": "^0.41.6",
+    "source-map-support": "^0.4.14"
+  }
+}
