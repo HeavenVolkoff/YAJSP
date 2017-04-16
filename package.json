@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "standard && node ./test/run.js",
+    "test": "node_modules/.bin/standard && node ./test/run.js",
     "prettify": "scripts/prettify ./src"
   },
   "repository": {
@@ -28,8 +28,9 @@
   },
   "homepage": "https://github.com/HeavenVolkoff/JSONStream#readme",
   "devDependencies": {
-    "tape": "^4.6.3",
     "rollup": "^0.41.6",
-    "source-map-support": "^0.4.14"
+    "source-map-support": "^0.4.14",
+    "standard": "^10.0.2",
+    "tape": "^4.6.3"
   }
 }
