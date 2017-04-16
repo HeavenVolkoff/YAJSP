@@ -1,15 +1,15 @@
 'use strict'
 
-export const NUMBER_ZERO = 48
-export const NUMBER_ONE = 49
-export const NUMBER_TWO = 50
-export const NUMBER_THREE = 51
-export const NUMBER_FOUR = 52
-export const NUMBER_FIVE = 53
-export const NUMBER_SIX = 54
-export const NUMBER_SEVEN = 55
-export const NUMBER_EIGHT = 56
-export const NUMBER_NINE = 57
+export const ZERO = 48
+export const ONE = 49
+export const TWO = 50
+export const THREE = 51
+export const FOUR = 52
+export const FIVE = 53
+export const SIX = 54
+export const SEVEN = 55
+export const EIGHT = 56
+export const NINE = 57
 
 export const SPACE = 32
 export const BRACES = 123

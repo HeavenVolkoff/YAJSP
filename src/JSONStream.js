@@ -6,7 +6,7 @@ import { Writable } from 'stream'
 // Internal
 import JSONNumber from './JSONNumber'
 import JSONBaseType from './JSONBaseType'
-import { SPACE, LINE_FEED, HORIZONTAL_TAB, CARRIAGE_RETURN } from './constants'
+import { SPACE, NEW_LINE, HORIZONTAL_TAB, CARRIAGE_RETURN } from './constants'
 
 export class JSONStream extends Writable {
   constructor () {
@@ -53,7 +53,7 @@ export class JSONStream extends Writable {
       error = root.next(code)
     } else if (
       code !== SPACE &&
-      code !== LINE_FEED &&
+      code !== NEW_LINE &&
       code !== HORIZONTAL_TAB &&
       code !== CARRIAGE_RETURN
     ) {
