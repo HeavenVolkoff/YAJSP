@@ -45,7 +45,7 @@ export default class JSONBaseType {
    * @param {emitter} emit - Emit a JSONStream event inside each specific parser
    */
   constructor (emit) {
-    this.ended = false
+    this.closed = false
     this.emit = emit
   }
 
@@ -55,7 +55,7 @@ export default class JSONBaseType {
    * @protected
    */
   _close () {
-    throw new AbstractMethodError(this.constructor, this.next)
+    this.closed = true
   }
 
   /**

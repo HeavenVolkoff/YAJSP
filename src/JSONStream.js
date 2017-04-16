@@ -30,7 +30,7 @@ export class JSONStream extends Writable {
    */
   onFinish () {
     const root = this.root
-    if (root === null || !root.ended) {
+    if (root === null || !root.closed) {
       this.emit('error', new SyntaxError('Unexpected end of JSON input'))
     }
   }
