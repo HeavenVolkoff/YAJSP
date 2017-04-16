@@ -4,8 +4,8 @@ import Resettable from './mixins/Resettable'
 import JSONBaseType from './JSONBaseType'
 import { nextPowerOfTwo } from './util/index'
 import {
-  NUMBER_ZERO,
-  NUMBER_NINE,
+  ZERO,
+  NINE,
   LOWERCASE_A,
   LOWERCASE_B,
   LOWERCASE_F,
@@ -34,14 +34,13 @@ export default class JSONString extends Resettable(JSONBaseType) {
    * @param {Boolean} [isKey] - Describe if this is a string or an object key
    */
   constructor (emit, isKey) {
-    super(emit)
+    super(emit, isKey ? 'key' : 'value')
     this.cache = null
     this.buffer = Buffer.allocUnsafe(isKey ? 32 : 128)
     this.offset = 0
     this.length = 0
     this.escaped = false
     this.unicode = 0
-    this.eventType = isKey ? 'key' : 'value'
     this.unicodeCount = -1
   }
 
@@ -85,12 +84,10 @@ export default class JSONString extends Resettable(JSONBaseType) {
     // Assert that generated string doesn't have invalid UTF-8 sequences
     // TODO: Implement strictString option
     if (buffer.compare(Buffer.from(str)) === 0) {
-      this.emit(this.eventType, str)
+      super._close(str)
     } else {
       error = new SyntaxError(`Invalid UTF-8 sequence: ${str} at ${this}.`)
     }
-
-    super._close()
 
     return error
   }
@@ -181,8 +178,8 @@ export default class JSONString extends Resettable(JSONBaseType) {
    * @protected
    */
   _parseUnicodeSequence (code) {
-    const codePoint = code >= NUMBER_ZERO && code <= NUMBER_NINE
-      ? code - NUMBER_ZERO
+    const codePoint = code >= ZERO && code <= NINE
+      ? code - ZERO
       : code >= UPPERCASE_A && code <= UPPERCASE_F
           ? code - UPPERCASE_A + 10
           : code >= LOWERCASE_A && code <= LOWERCASE_F
