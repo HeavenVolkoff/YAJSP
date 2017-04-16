@@ -5,6 +5,7 @@ import { Writable } from 'stream'
 
 // Internal
 import JSONBaseType from './JSONBaseType'
+import { SPACE, LINE_FEED, HORIZONTAL_TAB, CARRIAGE_RETURN } from './constants'
 
 export class JSONStream extends Writable {
   constructor () {
@@ -45,9 +46,14 @@ export class JSONStream extends Writable {
     if (this.root !== null) {
       // In case root is already initialized redirect call to root.next
       error = root.next(code)
-    } else {
+    } else if (
+      code !== SPACE &&
+      code !== LINE_FEED &&
+      code !== HORIZONTAL_TAB &&
+      code !== CARRIAGE_RETURN
+    ) {
       const emit = (name, data) => this.emit(name, data)
-      const root = JSONBaseType.create()
+      const root = JSONBaseType.create(code, emit)
 
       if (root === null) {
         error = new SyntaxError(
