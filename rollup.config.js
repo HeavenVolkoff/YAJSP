@@ -7,7 +7,7 @@ if (!isDev) plugins = plugins.concat([])
 
 module.exports = {
   dest: 'index.js',
-  entry: '', // TODO
+  entry: 'src/JSONStream.js',
   format: 'cjs',
   plugins: plugins
 }
