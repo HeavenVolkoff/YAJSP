@@ -3,15 +3,15 @@
 process.env.BUILD = 'development'
 
 const vm = require('vm')
-const {rollup} = require('rollup')
+const { rollup } = require('rollup')
 const rollupConfig = require('../rollup.config')
-const {parse, resolve, join, basename} = require('path')
-const {readdirSync, statSync} = require('fs')
+const { parse, resolve, join, basename } = require('path')
+const { readdirSync, statSync } = require('fs')
 
-const {ownKeys} = Reflect
-const {getOwnPropertyDescriptor, getPrototypeOf, create, assign} = Object
+const { ownKeys } = Reflect
+const { getOwnPropertyDescriptor, getPrototypeOf, create, assign } = Object
 
-const copy = (object) => {
+const copy = object => {
   const keys = ownKeys(object)
   const props = {}
   const keyLength = keys.length
@@ -55,14 +55,14 @@ const _global = assign(copy(global), {
   exports: module.exports
 })
 
-const runTest = (path) => {
-  const {base, dir: _dir} = parse(path)
+const runTest = path => {
+  const { base, dir: _dir } = parse(path)
   const dir = resolve(__dirname, _dir)
   rollupConfig.entry = path
   rollupConfig.onwarn = () => {}
 
   return rollup(rollupConfig).then(bundle => {
-    const {code, map} = bundle.generate({
+    const { code, map } = bundle.generate({
       format: 'cjs',
       intro: `require('source-map-support').install({
   overrideRetrieveFile: true,
@@ -83,10 +83,11 @@ const runTest = (path) => {
     _global.__filename = base
     _global.__sourceMap = map.toString()
 
-    vm.runInNewContext(code, _global,
-      {filename: join(dir, base), displayError: true}
-    )
-  }).catch(error => console.error(error.stack))
+    vm.runInNewContext(code, _global, {
+      filename: join(dir, base),
+      displayError: true
+    })
+  })
 }
 
 let files = null
@@ -98,4 +99,7 @@ if (process.argv.length < 3) {
   files = process.argv.slice(2)
 }
 
-Promise.all(files.map(val => runTest(join(__dirname, val))))
+Promise.all(files.map(val => runTest(join(__dirname, val)))).catch(error => {
+  console.error(error.message)
+  process.exit(1)
+})
