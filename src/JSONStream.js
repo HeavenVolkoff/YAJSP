@@ -4,6 +4,7 @@
 import { Writable } from 'stream'
 
 // Internal
+import JSONNumber from './JSONNumber'
 import JSONBaseType from './JSONBaseType'
 import { SPACE, LINE_FEED, HORIZONTAL_TAB, CARRIAGE_RETURN } from './constants'
 
@@ -30,7 +31,11 @@ export class JSONStream extends Writable {
    */
   onFinish () {
     const root = this.root
-    if (root === null || !root.closed) {
+
+    if (root instanceof JSONNumber) {
+      // This is an edge case, see JSONNumber class definition for explanation.
+      root.next(SPACE)
+    } else if (root === null || !root.closed) {
       this.emit('error', new SyntaxError('Unexpected end of JSON input'))
     }
   }

@@ -14,7 +14,13 @@ import {
   NUMBER_NINE
 } from './util/constant'
 
-const { imul } = Math
+/**
+ * JSONNumber
+ * Attention: There are no delimiters to mark the begin or end of a JSONNumber.
+ * Thus there are some edge cases that require the addition of a synthetic delimiter,
+ * in order to ensure that the JSONNumber is correctly closed.
+ * When needed the synthetic should be a SPACE (\u0020).
+ */
 export default class JSONNumber extends JSONBaseType {
   /**
    * Create JSONNumber
@@ -25,8 +31,6 @@ export default class JSONNumber extends JSONBaseType {
     super(emit)
     this.value = firstDigit
   }
-
-  _close () {}
 
   next (code) {}
 
