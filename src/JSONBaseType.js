@@ -7,6 +7,30 @@ import JSONNumber from './JSONNumber' // TODO
 import JSONObject from './JSONObject' // TODO
 import JSONString from './JSONString' // TODO
 import { AbstractMethodError } from './util/error'
+import {
+  NUMBER_ZERO,
+  NUMBER_ONE,
+  NUMBER_TWO,
+  NUMBER_THREE,
+  NUMBER_FOUR,
+  NUMBER_FIVE,
+  NUMBER_SIX,
+  NUMBER_SEVEN,
+  NUMBER_EIGHT,
+  NUMBER_NINE,
+
+  BRACES,
+  BRACKET,
+  LETTER_F,
+  LETTER_N,
+  LETTER_T,
+  HYPHEN_MINUS,
+  QUOTATION_MARK,
+
+  NULL_BUFFER,
+  TRUE_BUFFER,
+  FALSE_BUFFER
+} from './constants'
 
 /**
  * Callback for emitting an event
@@ -57,6 +81,42 @@ export default class JSONBaseType {
    * @return {?JSONBaseType} - A JSON's specific type
    */
   static create (code, emit) {
-    // TODO
+    let type = null
+
+    switch (code) {
+      case QUOTATION_MARK:
+        type = new JSONString(emit)
+        break
+      case HYPHEN_MINUS:
+      case NUMBER_ZERO:
+      case NUMBER_ONE:
+      case NUMBER_TWO:
+      case NUMBER_THREE:
+      case NUMBER_FOUR:
+      case NUMBER_FIVE:
+      case NUMBER_SIX:
+      case NUMBER_SEVEN:
+      case NUMBER_EIGHT:
+      case NUMBER_NINE:
+        type = new JSONNumber(code, emit)
+        break
+      case BRACKET:
+        type = new JSONArray(emit)
+        break
+      case LETTER_F:
+        type = new JSONValue(code, FALSE_BUFFER, false, emit)
+        break
+      case LETTER_N:
+        type = new JSONValue(code, NULL_BUFFER, null, emit)
+        break
+      case LETTER_T:
+        type = new JSONValue(code, TRUE_BUFFER, true, emit)
+        break
+      case BRACES:
+        type = new JSONObject(emit)
+        break
+    }
+
+    return type
   }
 }
