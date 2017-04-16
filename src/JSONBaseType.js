@@ -1,5 +1,12 @@
 'use strict'
 
+/**
+ * Callback for emitting an event
+ * @callback emitter
+ * @param {string} name - Event name
+ * @param {*} data - Data sent with event
+ */
+
 // Internal
 import JSONArray from './JSONArray' // TODO
 import JSONValue from './JSONValue' // TODO
@@ -8,45 +15,37 @@ import JSONObject from './JSONObject' // TODO
 import JSONString from './JSONString' // TODO
 import { AbstractMethodError } from './util/error'
 import {
-  NUMBER_ZERO,
-  NUMBER_ONE,
-  NUMBER_TWO,
-  NUMBER_THREE,
-  NUMBER_FOUR,
-  NUMBER_FIVE,
-  NUMBER_SIX,
-  NUMBER_SEVEN,
-  NUMBER_EIGHT,
-  NUMBER_NINE,
-
+  ZERO,
+  ONE,
+  TWO,
+  THREE,
+  FOUR,
+  FIVE,
+  SIX,
+  SEVEN,
+  EIGHT,
+  NINE,
+  LOWERCASE_F,
+  LOWERCASE_N,
+  LOWERCASE_T,
   BRACES,
   BRACKET,
-  LETTER_F,
-  LETTER_N,
-  LETTER_T,
   HYPHEN_MINUS,
   QUOTATION_MARK,
-
   NULL_BUFFER,
   TRUE_BUFFER,
   FALSE_BUFFER
 } from './constants'
-
-/**
- * Callback for emitting an event
- * @callback emitter
- * @param {string} name - Event name
- * @param {*} data - Data sent with event
- */
 
 export default class JSONBaseType {
   /**
    * Construct JSONBaseType
    * @param {emitter} emit - Emit a JSONStream event inside each specific parser
    */
-  constructor (emit) {
-    this.closed = false
+  constructor (emit, eventType) {
     this.emit = emit
+    this.closed = false
+    this.eventType = eventType
   }
 
   /**
@@ -54,8 +53,9 @@ export default class JSONBaseType {
    * @return {?SyntaxError} - Any throw error is returned
    * @protected
    */
-  _close () {
+  _close (value) {
     this.closed = true
+    this.emit(this.eventType, value)
   }
 
   /**
@@ -88,28 +88,28 @@ export default class JSONBaseType {
         type = new JSONString(emit)
         break
       case HYPHEN_MINUS:
-      case NUMBER_ZERO:
-      case NUMBER_ONE:
-      case NUMBER_TWO:
-      case NUMBER_THREE:
-      case NUMBER_FOUR:
-      case NUMBER_FIVE:
-      case NUMBER_SIX:
-      case NUMBER_SEVEN:
-      case NUMBER_EIGHT:
-      case NUMBER_NINE:
+      case ZERO:
+      case ONE:
+      case TWO:
+      case THREE:
+      case FOUR:
+      case FIVE:
+      case SIX:
+      case SEVEN:
+      case EIGHT:
+      case NINE:
         type = new JSONNumber(code, emit)
         break
       case BRACKET:
         type = new JSONArray(emit)
         break
-      case LETTER_F:
+      case LOWERCASE_F:
         type = new JSONValue(code, FALSE_BUFFER, false, emit)
         break
-      case LETTER_N:
+      case LOWERCASE_N:
         type = new JSONValue(code, NULL_BUFFER, null, emit)
         break
-      case LETTER_T:
+      case LOWERCASE_T:
         type = new JSONValue(code, TRUE_BUFFER, true, emit)
         break
       case BRACES:
