@@ -90,7 +90,7 @@ export default class JSONString extends Resettable(JSONBaseType) {
       error = new SyntaxError(`Invalid UTF-8 sequence: ${str} at ${this}.`)
     }
 
-    this.ended = true
+    super._close()
 
     return error
   }
