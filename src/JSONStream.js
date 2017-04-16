@@ -4,11 +4,7 @@
 import { Writable } from 'stream'
 
 // Internal
-import JSONArray from './JSONArray' // TODO
-import JSONValue from './JSONValue' // TODO
-import JSONNumber from './JSONNumber' // TODO
-import JSONObject from './JSONObject' // TODO
-import JSONString from './JSONString' // TODO
+import JSONBaseType from './JSONBaseType'
 
 export class JSONStream extends Writable {
   constructor () {
@@ -51,13 +47,7 @@ export class JSONStream extends Writable {
       error = root.next(code)
     } else {
       const emit = (name, data) => this.emit(name, data)
-      const root =
-        JSONObject.create(code, emit) ||
-        JSONArray.create(code, emit) ||
-        JSONString.create(code, emit) ||
-        JSONValue.create(code, emit) ||
-        JSONNumber.create(code, emit) ||
-        null
+      const root = JSONBaseType.create()
 
       if (root === null) {
         error = new SyntaxError(

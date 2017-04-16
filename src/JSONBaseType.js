@@ -1,5 +1,11 @@
 'use strict'
 
+// Internal
+import JSONArray from './JSONArray' // TODO
+import JSONValue from './JSONValue' // TODO
+import JSONNumber from './JSONNumber' // TODO
+import JSONObject from './JSONObject' // TODO
+import JSONString from './JSONString' // TODO
 import { AbstractMethodError } from './util/error'
 
 /**
@@ -42,5 +48,15 @@ export default class JSONBaseType {
    */
   get [Symbol.toStringTag] () {
     return '[JSON baseType]'
+  }
+
+  /**
+   * Create a JSON's specific type according to received code
+   * @param {number} code - Character's utf-8 code to determine which JSON type to create
+   * @param {emitter} emit - Emit a JSONStream event inside each specific parser
+   * @return {?JSONBaseType} - A JSON's specific type
+   */
+  static create (code, emit) {
+    // TODO
   }
 }
