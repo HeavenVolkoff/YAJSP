@@ -25,7 +25,7 @@ export default class JSONBaseParser {
    */
   constructor (emit, closeEventType, openEventType) {
     this.emit = emit
-    this.closed = false
+    this.closed = true
   }
 
   /**
