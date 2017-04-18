@@ -1,5 +1,7 @@
 'use strict'
 
+import JSONStringParser from './JSONStringParser'
+
 const keys = Object.key
 
 /**
@@ -8,7 +10,14 @@ const keys = Object.key
  * Lazy getters are preferred: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get#Smart_self-overwriting_lazy_getters
  * @type {Object}
  */
-const factoryProps = {}
+const factoryProps = {
+  JSONStringParser: {
+    get: function () {
+      delete this.JSONStringParser
+      return (this.JSONStringParser = new JSONStringParser(this.emit))
+    }
+  }
+}
 
 /**
  * Open specialized parser according to received char code.

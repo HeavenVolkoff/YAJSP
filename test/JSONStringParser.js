@@ -3,8 +3,7 @@
 import { StringDecoder } from 'string_decoder'
 
 import test from 'tape'
-import JSONString from '../src/JSONString'
-import { QUOTATION_MARK } from '../src/util/constants'
+import JSONStringParser from '../src/parsers/JSONStringParser'
 
 const substr = (str, init, length) =>
   (init === 0 && length >= str.length
@@ -37,8 +36,8 @@ const substr = (str, init, length) =>
   /* eslint-enable no-useless-escape */
 ].forEach(str =>
   test(`Testing JSONString parser with valid JSON String: ${substr(str, 0, 40)}`, tape => {
-    const strBuff = Buffer.from(str.substring(1, str.length - 1))
-    const jsonStr = new JSONString(
+    const strBuff = Buffer.from(str)
+    const jsonStr = new JSONStringParser(
       (_type, value) =>
         process.nextTick(tape => {
           tape.equal(_type, 'value')
@@ -47,49 +46,54 @@ const substr = (str, init, length) =>
       false
     )
 
-    tape.plan(2 + strBuff.length + 1)
-    strBuff.forEach(charCode => tape.error(jsonStr.next(charCode)))
-    tape.error(jsonStr.next(QUOTATION_MARK))
+    tape.plan(2 + strBuff.length)
+    tape.equal(jsonStr.open(strBuff[0]), jsonStr)
+    let i = 0
+    while (++i < strBuff.length) {
+      tape.error(jsonStr.next(strBuff[i]))
+    }
   })
 )
 
 // Invalid Test cases
 ;[
-  { str: '"\b"', errorIndex: 0 },
-  { str: '"\f"', errorIndex: 0 },
-  { str: '"\n"', errorIndex: 0 },
-  { str: '"\r"', errorIndex: 0 },
-  { str: '"\t"', errorIndex: 0 },
-  { str: '"\\a"', errorIndex: 1 },
-  { str: '"\\B"', errorIndex: 1 },
-  { str: '"\\R"', errorIndex: 1 },
-  { str: '"\\1"', errorIndex: 1 },
-  { str: '"\\u"', errorIndex: 2 },
-  { str: '"\\u1"', errorIndex: 3 },
-  { str: '"\\u12"', errorIndex: 4 },
-  { str: '"\\u123"', errorIndex: 5 },
-  { str: Buffer.from([0x10, 0x34, 0xfe, 0xff, 0x45, 0x67]), errorIndex: 6 }
+  { str: '"\b"', errorIndex: 1 },
+  { str: '"\f"', errorIndex: 1 },
+  { str: '"\n"', errorIndex: 1 },
+  { str: '"\r"', errorIndex: 1 },
+  { str: '"\t"', errorIndex: 1 },
+  { str: '"\\a"', errorIndex: 2 },
+  { str: '"\\B"', errorIndex: 2 },
+  { str: '"\\R"', errorIndex: 2 },
+  { str: '"\\1"', errorIndex: 2 },
+  { str: '"\\u"', errorIndex: 3 },
+  { str: '"\\u1"', errorIndex: 4 },
+  { str: '"\\u12"', errorIndex: 5 },
+  { str: '"\\u123"', errorIndex: 6 },
+  {
+    str: Buffer.from([0x22, 0x10, 0x34, 0xfe, 0xff, 0x45, 0x67, 0x22]),
+    errorIndex: 7
+
+  }
 ].forEach(({ str, errorIndex }) =>
-  test(`Testing JSONString parser with valid JSON String: ${substr(str + '', 0, 40)}`, tape => {
-    const strBuff = str instanceof Buffer
-      ? str
-      : Buffer.from(str.substring(1, str.length - 1))
-    const jsonStr = new JSONString(
+  test(`Testing JSONString parser with invalid JSON String: ${substr(str + '', 0, 40)}`, tape => {
+    const strBuff = str instanceof Buffer ? str : Buffer.from(str)
+    const jsonStr = new JSONStringParser(
       (_type, value) =>
-        process.nextTick(tape => tape.fails('Invalid was accepted'), tape),
+        process.nextTick(tape => tape.fail('Invalid was accepted'), tape),
       false
     )
 
     tape.plan(errorIndex + 1)
+    tape.equal(jsonStr.open(strBuff[0]), jsonStr)
 
-    let i = -1
+    let i = 0
     while (++i < errorIndex) {
       tape.error(jsonStr.next(strBuff[i]))
     }
 
     tape.throws(() => {
-      const error = jsonStr.next(strBuff[errorIndex] || QUOTATION_MARK)
-      if (error !== null) throw error
+      throw jsonStr.next(strBuff[errorIndex])
     }, SyntaxError)
   })
 )
