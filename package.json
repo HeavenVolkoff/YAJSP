@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node_modules/.bin/standard && node ./test/run.js",
+    "test": "node_modules/.bin/standard && node ./test/run.js && node_modules/.bin/rollup -c --environment BUILD:production",
     "prettify": "scripts/prettify ./src"
   },
   "repository": {

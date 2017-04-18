@@ -231,3 +231,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/vim,node,macos,linux,windows,jetbrains,sublimetext
+
+### Project ###
+index.js
