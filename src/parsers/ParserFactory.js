@@ -1,10 +1,6 @@
 'use strict'
 
-import JSONArrayParser from './JSONArrayParser'
 import JSONNumberParser from './JSONNumberParser'
-import JSONObjectParser from './JSONObjectParser'
-import JSONStringParser from './JSONStringParser'
-import JSONGenericParser from './JSONGenericParser'
 
 const keys = Object.key
 
@@ -15,55 +11,10 @@ const keys = Object.key
  * @type {Object}
  */
 const factoryProps = {
-  JSONTrueParser: {
-    get: function () {
-      delete this.JSONTrueParser
-      return (this.JSONTrueParser = new JSONGenericParser(
-        this.emit,
-        Buffer.from('true')
-      ))
-    }
-  },
-  JSONFalseParser: {
-    get: function () {
-      delete this.JSONFalseParser
-      return (this.JSONFalseParser = new JSONGenericParser(
-        this.emit,
-        Buffer.from('false')
-      ))
-    }
-  },
-  JSONNullParser: {
-    get: function () {
-      delete this.JSONNullParser
-      return (this.JSONNullParser = new JSONGenericParser(
-        this.emit,
-        Buffer.from('null')
-      ))
-    }
-  },
   JSONNumberParser: {
     get: function () {
       delete this.JSONNumberParser
       return (this.JSONNumberParser = new JSONNumberParser(this.emit))
-    }
-  },
-  JSONStringParser: {
-    get: function () {
-      delete this.JSONStringParser
-      return (this.JSONStringParser = new JSONStringParser(this.emit))
-    }
-  },
-  JSONArrayParser: {
-    get: function () {
-      delete this.JSONArrayParser
-      return (this.JSONArrayParser = new JSONArrayParser(this.emit, this))
-    }
-  },
-  JSONObjectParser: {
-    get: function () {
-      delete this.JSONObjectParser
-      return (this.JSONObjectParser = new JSONObjectParser(this.emit, this))
     }
   }
 }

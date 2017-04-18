@@ -4,7 +4,8 @@
 import { Writable } from 'stream'
 
 // Internal
-import JSONNumber from './JSONNumber'
+import { SPACE } from './util/constants'
+import JSONNumberParser from './parsers/JSONNumberParser'
 import { isWhiteSpace } from './util/misc'
 import parseFirstCharacter from './parsers/ParserFactory'
 
@@ -32,7 +33,7 @@ export class JSONStream extends Writable {
   onFinish () {
     const root = this.root
 
-    if (root instanceof JSONNumber) {
+    if (root instanceof JSONNumberParser) {
       // This is an edge case, see JSONNumber class definition for explanation.
       root.next(SPACE)
     } else if (root === null || !root.closed) {
