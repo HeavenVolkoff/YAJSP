@@ -35,18 +35,9 @@ export const LOWERCASE_U = 117
 export const UPPERCASE_A = 65
 export const UPPERCASE_F = 70
 
-let nullBuff = null
-let trueBuff = null
-let falseBuff = null
-export const VALUE = Object.create(null, {
-  NULL: {
-    get: () => (nullBuff === null ? (nullBuff = Buffer.from('null')) : nullBuff)
-  },
-  TRUE: {
-    get: () => (trueBuff === null ? (trueBuff = Buffer.from('true')) : trueBuff)
-  },
-  FALSE: {
-    get: () =>
-      (falseBuff === null ? (falseBuff = Buffer.from('false')) : falseBuff)
-  }
-})
+export const KEY_EVENT = 'key'
+export const VALUE_EVENT = 'value'
+export const OPEN_ARRAY_EVENT = 'openArray'
+export const CLOSE_ARRAY_EVENT = 'closeAArry'
+export const OPEN_OBJECT_EVENT = 'openObject'
+export const CLOSE_OBJECT_EVENT = 'closeObject'

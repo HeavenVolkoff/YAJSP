@@ -4,8 +4,8 @@
 import { Writable } from 'stream'
 
 // Internal
-import JSONBaseType from './JSONBaseType'
-import { SPACE, NEW_LINE, HORIZONTAL_TAB, CARRIAGE_RETURN } from './constants'
+import { isWhiteSpace } from './util/misc'
+import parseFirstCharacter from './parsers/ParserFactory'
 
 export class JSONStream extends Writable {
   constructor () {
@@ -26,7 +26,7 @@ export class JSONStream extends Writable {
   }
 
   /**
-   * Assure JSON ended correctly, in case not thrown error
+   * Assure JSON ended correctly, in case not emit error
    */
   onFinish () {
     const root = this.root
@@ -41,31 +41,23 @@ export class JSONStream extends Writable {
    * @return {?SyntaxError} - Any throw error is returned
    */
   init (code) {
-    let error = null
+    let root = this.root
 
-    if (this.root !== null) {
-      // In case root is already initialized redirect call to root.next
-      error = root.next(code)
-    } else if (
-      code !== SPACE &&
-      code !== NEW_LINE &&
-      code !== HORIZONTAL_TAB &&
-      code !== CARRIAGE_RETURN
-    ) {
-      const emit = (name, data) => this.emit(name, data)
-      const root = JSONBaseType.create(code, emit)
+    // In case root is already initialized redirect call to root.next
+    if (root !== null) return root.next(code)
 
-      if (root === null) {
-        error = new SyntaxError(
-          `Unexpected token ${String.fromCharCode(code)} at start of JSON input`
-        )
-      } else {
-        this.root = root
-        this.next = code => this.root.next(code)
-      }
+    // Ignore whitespace
+    if (isWhiteSpace()) return
+
+    root = parseFirstCharacter(code, (name, data) => this.emit(name, data))
+    if (root === null) {
+      return new SyntaxError(
+        `Unexpected token ${String.fromCharCode(code)} at start of JSON input`
+      )
     }
 
-    return error
+    this.root = root
+    this.next = code => this.root.next(code)
   }
 
   _write (chunk, _, done) {
