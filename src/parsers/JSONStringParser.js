@@ -129,42 +129,50 @@ export default class JSONStringParser extends Resettable(JSONBaseParser) {
     // Special treatment for escaped char sequences
     if (escaped) {
       this.escaped = false
-      return code === LOWERCASE_N
-        ? this._append(NEW_LINE)
-        : code === QUOTATION_MARK
-            ? this._append(QUOTATION_MARK)
-            : code === REVERSE_SOLIDUS
-                ? this._append(REVERSE_SOLIDUS)
-                : code === LOWERCASE_R
-                    ? this._append(CARRIAGE_RETURN)
-                    : code === LOWERCASE_T
-                        ? this._append(HORIZONTAL_TAB)
-                        : code === LOWERCASE_B
-                            ? this._append(BACKSPACE)
-                            : code === LOWERCASE_F
-                                ? this._append(FORMFEED)
-                                : code === LOWERCASE_U
-                                    ? ((this.unicodeCount = 0), null)
-                                    : code === SOLIDUS
-                                        ? this._append(SOLIDUS)
-                                        : new SyntaxError(
-                                            `Unexpected escaped token: ${String.fromCharCode(code)} at ${this}`
-                                          )
+      switch (code) {
+        case LOWERCASE_N:
+          return this._append(NEW_LINE)
+        case QUOTATION_MARK:
+          return this._append(QUOTATION_MARK)
+        case REVERSE_SOLIDUS:
+          return this._append(REVERSE_SOLIDUS)
+        case LOWERCASE_R:
+          return this._append(CARRIAGE_RETURN)
+        case LOWERCASE_T:
+          return this._append(HORIZONTAL_TAB)
+        case LOWERCASE_B:
+          return this._append(BACKSPACE)
+        case LOWERCASE_F:
+          return this._append(FORMFEED)
+        case LOWERCASE_U:
+          this.unicodeCount = 0
+          return null
+        case SOLIDUS:
+          return this._append(SOLIDUS)
+        default:
+          return new SyntaxError(
+            `Unexpected escaped token: ${String.fromCharCode(code)} at ${this}`
+          )
+      }
     }
 
-    return code === NEW_LINE ||
-      code === FORMFEED ||
-      code === BACKSPACE ||
-      code === HORIZONTAL_TAB ||
-      code === CARRIAGE_RETURN
-      ? new SyntaxError(
+    switch (code) {
+      case NEW_LINE:
+      case FORMFEED:
+      case BACKSPACE:
+      case HORIZONTAL_TAB:
+      case CARRIAGE_RETURN:
+        return new SyntaxError(
           `Unexpected escaped token: ${String.fromCharCode(code)} at ${this}`
         )
-      : code === QUOTATION_MARK
-          ? this._close()
-          : code === REVERSE_SOLIDUS
-              ? ((this.escaped = true), null)
-              : this._append(code)
+      case QUOTATION_MARK:
+        return this._close()
+      case REVERSE_SOLIDUS:
+        this.escaped = true
+        return null
+      default:
+        return this._append(code)
+    }
   }
 
   /**
