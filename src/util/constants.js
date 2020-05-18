@@ -11,6 +11,8 @@ export const SEVEN = 55
 export const EIGHT = 56
 export const NINE = 57
 
+export const DOT = 46
+export const COMMA = 44
 export const SPACE = 32
 export const BRACES = 123
 export const SOLIDUS = 47
@@ -26,6 +28,7 @@ export const CARRIAGE_RETURN = 13
 
 export const LOWERCASE_A = 97
 export const LOWERCASE_B = 98
+export const LOWERCASE_E = 101
 export const LOWERCASE_F = 102
 export const LOWERCASE_N = 110
 export const LOWERCASE_R = 114
@@ -33,6 +36,7 @@ export const LOWERCASE_T = 116
 export const LOWERCASE_U = 117
 
 export const UPPERCASE_A = 65
+export const UPPERCASE_E = 69
 export const UPPERCASE_F = 70
 
 export const KEY_EVENT = 'key'
