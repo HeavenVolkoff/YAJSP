@@ -68,6 +68,14 @@ export default class JSONBaseParser {
   }
 
   /**
+   * Reset parser
+   * @return {JSONBaseParser} - The parser
+   */
+  reset () {
+    throw new AbstractMethodError(this.constructor, this.reset)
+  }
+
+  /**
    * Return JSON type name representation
    * @return {string} - Class string representation
    */
