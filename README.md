@@ -40,7 +40,7 @@ Small note: If editing the [readme][README], please conform to the [standard-rea
 [PRETTIER]: https://github.com/prettier/prettier "Prettier Homepage"
 [STANDARDJS]: https://standardjs.com "StandardJS Homepage"
 [CONTRIBUTE]: ./CONTRIBUTE.md "Contribute file"
-[TRAVIS_BADGE]: https://travis-ci.com/HeavenVolkoff/YAJSP.svg?token=2Wc3H1xy8dXsxsrwsdpb&branch=master "Travis Badge"
+[TRAVIS_BADGE]: https://travis-ci.com/HeavenVolkoff/YAJSP.svg?token=2Wc3H1xy8dXsxsrwsdpb&branch=develop "Travis Badge"
 [PRETTIER_BADGE]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg "Prettier Badge"
 [STANDARD_README]: https://github.com/RichardLitt/standard-readme "Standard Readme Homepage"
 [STANDARDJS_BADGE]: https://img.shields.io/badge/code_style-standard-brightgreen.svg "StandardJS Badge"
