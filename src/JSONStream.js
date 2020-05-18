@@ -18,7 +18,7 @@ export class JSONStream extends Writable {
      * Can be a: String; Number, Array, Object, true, false, null
      * @type {?JSONBaseType}
      */
-    this.root = null
+    this.root = this
 
     /** @function init */
     this.next = this.init
@@ -50,7 +50,7 @@ export class JSONStream extends Writable {
     let root = this.root
 
     // In case root is already initialized redirect call to root.next
-    if (root !== null) return root.next(code)
+    if (root !== this) return root.next(code)
 
     // Ignore whitespace
     if (isWhiteSpace()) return
@@ -63,18 +63,17 @@ export class JSONStream extends Writable {
     }
 
     this.root = root
-    this.next = code => this.root.next(code)
+    this.next = root.next
   }
 
   _write (chunk, _, done) {
+    const root = this.root
     const next = this.next
     const length = chunk.length
 
     let i = -1
     let error = null
-    while (++i < length && error !== null) {
-      error = next(chunk[i])
-    }
+    while (++i < length && error !== null) error = next.call(root, chunk[i])
 
     done(error)
   }

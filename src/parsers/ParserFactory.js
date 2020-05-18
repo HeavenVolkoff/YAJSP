@@ -1,6 +1,7 @@
 'use strict'
 
 import JSONNumberParser from './JSONNumberParser'
+import JSONStringParser from './JSONStringParser'
 
 const keys = Object.key
 
@@ -15,6 +16,12 @@ const factoryProps = {
     get: function () {
       delete this.JSONNumberParser
       return (this.JSONNumberParser = new JSONNumberParser(this.emit))
+    }
+  },
+  JSONStringParser: {
+    get: function () {
+      delete this.JSONStringParser
+      return (this.JSONStringParser = new JSONStringParser(this.emit))
     }
   }
 }
